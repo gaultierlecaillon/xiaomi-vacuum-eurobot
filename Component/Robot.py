@@ -24,7 +24,7 @@ class Robot:
 
     def initRobot(self):
         self.Vac = Vacuum(self.ip, self.token)
-        self.Vac.set_fan_speed(0)
+        self.Vac.set_fan_speed(30)
 
         '''
         self.kit.servo[0].angle = 140
@@ -55,6 +55,7 @@ class Robot:
             print("Try left ", number_of_tries)
             number_of_tries -= 1
             time.sleep(1)
+        self.find()
         print("Robot Ready")
 
     def move(self, rotation, velocity, duration):
@@ -62,9 +63,7 @@ class Robot:
             print("Moving Robot...")
 
         self.Vac.manual_control(rotation, velocity, duration)
-        time.sleep(duration / 1000)
-
-        print("Done Moving Robot...")
+        return duration / 1000  # Time we should wait before move finished
 
     def stop(self):
         if self.debug:
