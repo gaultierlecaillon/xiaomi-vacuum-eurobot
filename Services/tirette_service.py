@@ -5,6 +5,7 @@ import asyncio
 import os
 import sys
 import inspect
+import RPi.GPIO as GPIO
 
 ''' Import cellaserv submodul '''
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -18,9 +19,27 @@ from cellaserv.service import Service
 
 class Tirette(Service):
 
-    @Service.event("lol")
-    async def lol(self):
-        self.publish('lol')
+    @Service.coro
+    async def initTirette(self):
+        # plug on 3.3V and GPIO4 (7)
+        channel = 4
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(channel, GPIO.OUT)
+        GPIO.output(channel, GPIO.LOW)
+
+        confirmTimeTirette = 5
+        confirm = 0
+        while True:
+            status = bool(GPIO.input(channel))
+            if status and confirm < confirmTimeTirette:
+                print("ah ?")
+                confirm += 1
+            elif status and confirm >= confirmTimeTirette:
+                print("Tirette is here !")
+            else:
+                print("No tirette :(")
+                confirm = 0
+            time.sleep(1)
 
 
 async def main():
