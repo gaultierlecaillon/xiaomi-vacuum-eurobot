@@ -28,15 +28,14 @@ class Date(Service):
     async def print_async(self):
         print(time.time())
 
-    #@Service.event("waitingForTirette") # TODO
-    @Service.event("manualModeStarted")
+    @Service.event("startMatch")
     async def startChrono(self):
         current_time = time.time()
         time_spend = time.time() - current_time
-        while time_spend < 8:
-            print("Time spend", time_spend)
+        while time_spend < 100000000:
+            print("Match started", int(time_spend), "s ago")
             time_spend = time.time() - current_time
-            time.sleep(0.1)
+            time.sleep(1)
         self.publish("stop")
 
     @Service.coro

@@ -14,32 +14,32 @@ grandParentdir = os.path.dirname(parentdir)
 sys.path.insert(0, grandParentdir + '/python-cellaserv3/')
 from cellaserv.service import Service
 
-from cellaserv.service import Service
-
 
 class Tirette(Service):
 
-    @Service.coro
-    async def initTirette(self):
-        # plug on 3.3V and GPIO4 (7)
-        channel = 4
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(channel, GPIO.OUT)
-        GPIO.output(channel, GPIO.LOW)
+    tiretteGPIO = 4
 
-        confirmTimeTirette = 5
-        confirm = 0
-        while True:
-            status = bool(GPIO.input(channel))
-            if status and confirm < confirmTimeTirette:
-                print("ah ?")
-                confirm += 1
-            elif status and confirm >= confirmTimeTirette:
-                print("Tirette is here !")
-            else:
-                print("No tirette :(")
-                confirm = 0
+    def isTirette(self):
+        return GPIO.input(self.tiretteGPIO)  # Returns 0 if OFF or 1 if ON
+
+    @Service.action
+    def tirette(self):
+
+        GPIO.setmode(GPIO.BCM)
+
+        # Setup your channel
+        GPIO.setup(self.tiretteGPIO, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+        while not self.isTirette():
+            print("Please put the tirette...")
             time.sleep(1)
+
+        self.publish("Robot ready !")
+        while self.isTirette():
+            print("Waiting to start the match")
+            time.sleep(0.1)
+
+        self.publish("startHomologation")
 
 
 async def main():

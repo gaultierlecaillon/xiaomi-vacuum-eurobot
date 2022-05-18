@@ -19,5 +19,7 @@ async def main():
         cs.xiaomi.startManualMode()
     ])
 
+    await cs.tirette.tirette()
+
 if __name__ == "__main__":
     asyncio.run(main())

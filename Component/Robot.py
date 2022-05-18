@@ -55,7 +55,7 @@ class Robot:
             print("Try left ", number_of_tries)
             number_of_tries -= 1
             time.sleep(1)
-        self.find()
+        #self.find()
         print("Robot Ready")
 
     def move(self, rotation, velocity, duration):

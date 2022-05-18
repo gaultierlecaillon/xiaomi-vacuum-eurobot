@@ -1,0 +1,1 @@
+sudo systemctl daemon-reload && systemctl restart date.service && systemctl restart xiaomi.service  && systemctl restart tirette.service && systemctl restart ultrasonic.service
