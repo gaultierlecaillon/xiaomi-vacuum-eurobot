@@ -13,12 +13,14 @@ from cellaserv.proxy import CellaservProxy
 
 async def main():
     cs = CellaservProxy()
+    color = "V"
 
     await asyncio.wait([
         cs.date.time(),
         cs.xiaomi.startManualMode()
     ])
 
+    await cs.xiaomi.placement(color)
     await cs.tirette.tirette("startHomologationV")
 
 if __name__ == "__main__":

@@ -22,12 +22,13 @@ GPIO.setmode(GPIO.BCM)
 PUMP_GPIO = 18
 GPIO.setup(PUMP_GPIO, GPIO.OUT)
 
+
 def initArm():
     GPIO.output(PUMP_GPIO, False)
     kit.servo[2].angle = 20
     time.sleep(0.5)
     kit.servo[0].angle = 170
-    kit.servo[1].angle = 180
+    kit.servo[1].angle = 170
     time.sleep(0.5)
     kit.servo[2].angle = 120
 
@@ -40,7 +41,8 @@ def moveSlow(servoId, start, to, tempo):
         for i in range(start, to, -1):
             kit.servo[servoId].angle = i
             time.sleep(tempo)
-            
+
+
 def getDistance():
     # GPIO Mode (BOARD / BCM)
     GPIO.setmode(GPIO.BCM)
@@ -81,8 +83,8 @@ def getDistance():
 
     return int(distance)
 
-class Xiaomi(Service):
 
+class Xiaomi(Service):
     robot = None
 
     @Service.action
@@ -91,6 +93,15 @@ class Xiaomi(Service):
         self.robot.startManualMode()
         self.publish("initSensor")
         initArm()
+
+    @Service.action
+    def placement(self, color):
+        if color == "V":
+            self.robot.move(0, 0.1, 5000)
+        elif color == "J":
+            self.robot.move(0, -0.1, 5000)
+        time.sleep(5)
+
 
     def grabDistributeur(self):
         # Deploy arm
@@ -108,63 +119,29 @@ class Xiaomi(Service):
         moveSlow(0, 10, 120, 0.01)
 
 
-
     @Service.event("startHomologationJ")
     def startHomologationJ(self):
-
         self.robot.move(0, 0.1, 5000)
         time.sleep(5)
 
         self.grabDistributeur()
 
-        self.robot.move(-10, -0.1, 2000)
+        self.robot.move(-5, -0.1, 2000)
         time.sleep(2)
 
         # Depose
         moveSlow(0, 120, 10, 0.01)
         GPIO.output(PUMP_GPIO, False)
-        time.sleep(5)
+        time.sleep(4)
         initArm()
 
-        self.robot.move(60, 0, 2000)
+        self.robot.move(50, 0, 2000)
         time.sleep(2)
 
-        self.robot.move(0, 0.1, 5000)
-        time.sleep(5)
-
-        self.robot.move(90, 0, 2000)
+        self.robot.move(0, 0.2, 2000)
         time.sleep(2)
 
-        self.robot.move(0, 0.1, 5000)
-        time.sleep(5)
 
-        self.robot.stop()
-
-    @Service.event("startHomologationV")
-    def startHomologationV(self):
-        
-        self.robot.move(0, -0.1, 5000)
-        time.sleep(5)
-
-        self.grabDistributeur()
-
-        self.robot.move(10, 0.1, 3000)
-        time.sleep(3)
-
-        # Depose
-        moveSlow(0, 120, 10, 0.01)
-        GPIO.output(PUMP_GPIO, False)
-        time.sleep(5)
-        initArm()
-
-        self.robot.move(60, 0, 2000)
-        time.sleep(2)
-
-        self.robot.move(0, 0.1, 10000)
-        startTime = time.time()
-        while getDistance() > 20 and time.time() - startTime < 10:
-            print("ok")
-            time.sleep(0.1)
 
     @Service.event("stop")
     def stop(self):

@@ -24,10 +24,7 @@ class Tirette(Service):
 
     @Service.action
     def tirette(self, strategy):
-
         GPIO.setmode(GPIO.BCM)
-
-        # Setup your channel
         GPIO.setup(self.tiretteGPIO, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         while not self.isTirette():
