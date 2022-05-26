@@ -16,8 +16,10 @@ async def main():
 
     await asyncio.wait([
         cs.date.time(),
-        cs.xiaomi.startManualMode("V")
+        cs.xiaomi.startManualMode("J")
     ])
+
+    await cs.tirette.tirette("startHomologationJ")
 
 if __name__ == "__main__":
     asyncio.run(main())

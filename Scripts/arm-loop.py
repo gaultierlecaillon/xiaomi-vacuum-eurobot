@@ -15,7 +15,7 @@ while True:
     print("down")
     GPIO.output(PUMP_GPIO, False)
     kit.servo[0].angle = 170
-    kit.servo[1].angle = 170
+    kit.servo[1].angle = 180
     time.sleep(0.5)
     kit.servo[2].angle = 120
 

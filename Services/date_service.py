@@ -11,7 +11,6 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 grandParentdir = os.path.dirname(parentdir)
 sys.path.insert(0, grandParentdir + '/python-cellaserv3/')
-print("path", grandParentdir + '/python-cellaserv3/')
 from cellaserv.service import Service
 
 
@@ -19,10 +18,6 @@ class Date(Service):
     @Service.action
     async def time(self):
         return int(time.time())
-
-    @Service.action("print_time")
-    def print(self):
-        print(time.time())
 
     @Service.action
     async def print_async(self):
@@ -32,7 +27,7 @@ class Date(Service):
     async def startChrono(self):
         current_time = time.time()
         time_spend = time.time() - current_time
-        while time_spend < 100000000:
+        while time_spend < 100:
             print("Match started", int(time_spend), "s ago")
             time_spend = time.time() - current_time
             time.sleep(1)

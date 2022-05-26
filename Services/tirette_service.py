@@ -23,7 +23,7 @@ class Tirette(Service):
         return GPIO.input(self.tiretteGPIO)  # Returns 0 if OFF or 1 if ON
 
     @Service.action
-    def tirette(self):
+    def tirette(self, strategy):
 
         GPIO.setmode(GPIO.BCM)
 
@@ -39,7 +39,7 @@ class Tirette(Service):
             print("Waiting to start the match")
             time.sleep(0.1)
 
-        self.publish("startHomologation")
+        self.publish(strategy)
 
 
 async def main():

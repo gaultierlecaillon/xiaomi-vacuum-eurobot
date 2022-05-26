@@ -19,7 +19,7 @@ async def main():
         cs.xiaomi.startManualMode()
     ])
 
-    await cs.tirette.tirette()
+    await cs.tirette.tirette("startHomologationV")
 
 if __name__ == "__main__":
     asyncio.run(main())

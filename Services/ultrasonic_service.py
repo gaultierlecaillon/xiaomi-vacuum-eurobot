@@ -14,8 +14,6 @@ grandParentdir = os.path.dirname(parentdir)
 sys.path.insert(0, grandParentdir + '/python-cellaserv3/')
 from cellaserv.service import Service
 
-from cellaserv.service import Service
-
 
 def getDistance():
     # GPIO Mode (BOARD / BCM)
@@ -60,7 +58,7 @@ def getDistance():
 
 class Ultrasonic(Service):
 
-    @Service.event("manualModeStarted")
+    @Service.event("initSensor")
     async def initSensor(self):
         trigger = 20  # in cm
         confirmation = 0
@@ -74,7 +72,7 @@ class Ultrasonic(Service):
                 confirmation = 0
 
             if confirmation >= 3:
-                self.publish("stop")
+                self.publish("obstacle")
                 break
 
             time.sleep(0.1)

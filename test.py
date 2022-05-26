@@ -2,6 +2,7 @@ import asyncio
 import os
 import sys
 import inspect
+import time
 
 ''' Import cellaserv submodul '''
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -16,8 +17,11 @@ async def main():
 
     await asyncio.wait([
         cs.date.time(),
-        cs.xiaomi.startManualMode("V")
+        cs.xiaomi.startManualMode()
     ])
+
+    await cs.xiaomi.move(0, 0.1, 5000)
+    time.sleep(5)
 
 if __name__ == "__main__":
     asyncio.run(main())
